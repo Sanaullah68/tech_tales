@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechTales - Blog & News Grid View</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .blog-title, .news-title {
+            text-align: center;
+            margin-top: 20px;
+            color: #343a40;
+        }
+
+        .blog-container, .news-container {
+            margin-top: 40px;
+        }
+
+        .card {
+            border: none;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .card-text {
+            color: #6c757d;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .read-more {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .navbar-brand:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 767px) {
+            .card {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% for message in messages %}
+    <script>
+        alert('{{message}}');
+    </script>
+    {% endfor %}
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">TechTales</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout_view' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login_view' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Search Bar -->
+                <form class="d-flex ms-3" action="{% url 'search_result'%}" method="GET">
+                    <input class="form-control me-2" value="{{query}}" type="search" name="q" placeholder="Search Blogs or News" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Section -->
+    <h1 class="blog-title">TechTales - Latest Blogs</h1>
+    <div class="container blog-container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for blog in blogs %}
+            {% if blog.status == 'verified' %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{ blog.image.url }}" class="card-img-top" alt="Blog Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ blog.title }}</h5>
+                        <p class="card-text">{{ blog.content|truncatewords:20 }}</p>
+                        <a href="{% url 'blog_details' blog.id %}" class="read-more">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+            <p>No blogs uploaded yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- News Section -->
+    <h1 class="news-title">TechTales - Latest News</h1>
+    <div class="container news-container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for news in news %}
+            {% if news.is_verified %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{ news.image.url }}" class="card-img-top" alt="News Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{ news.content|truncatewords:20 }}</p>
+                        <a href="{% url 'news_details' news.id %}" class="read-more">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+            <p>No news uploaded yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
