@@ -104,7 +104,7 @@ def add_post(request):
             return redirect('index')
     
     return render(request, 'add_post.html')
-
+# this is  for the blog to edit 
 def edit_blog(request,blog_id):
     blog = Blog.objects.get(id = blog_id)
     if request.method == 'POST':
