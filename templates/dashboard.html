@@ -139,7 +139,13 @@
 
             <!-- User Profile Dropdown -->
             <div class="user-profile">
-                <img src="{{user_profile.profile_image.url}}" alt="Profile Picture" class="profile-pic">
+                
+                {% if profile_image %}
+                <img src="{{user_profile.profile_image.url}}" alt="Profile Image">
+                {% else %}
+                <img src="/static/default_profile.png" alt="Default Profile Image">
+                {% endif %}
+
                 <span class="username">{{request.user}}</span>
                 <div class="profile-dropdown">
                     <a href="{% url 'user_profile' user_profile.id %}">Profile</a>
@@ -147,7 +153,7 @@
                     <a href="{% url 'logout_view'%}">Logout</a>
                 </div>
             </div>
-            
+
         </div>
     </nav>
 

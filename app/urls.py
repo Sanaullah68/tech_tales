@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path,include
 from .views import *
+from .routers import router
 urlpatterns = [
     path('',index,name='index'),
     path('blog_details/<int:blog_id>/',blog_details,name='blog_details'),
@@ -19,4 +20,5 @@ urlpatterns = [
     path('edit_profile/',edit_profile,name='edit_profile'),
     path('filter_view/',filter_view,name ='filter_view'),
     path('search_result/',search_result,name ='search_result'),
+    path('api/',include(router.urls))
 ]

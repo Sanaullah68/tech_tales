@@ -73,13 +73,16 @@ def logout_view(request):
 def dashboard(request):
     blogs = Blog.objects.filter(user = request.user)
     news = News.objects.filter(user = request.user)
-    user_profile = UserProfile.objects.get(user = request.user)
+    user_profile, created = UserProfile.objects.get_or_create(user = request.user)
+    profile_image = user_profile.profile_image.url if user_profile.profile_image else None
     context = {
         'blogs':blogs,
         'news':news,
         'user_profile':user_profile,
+        'profile_image': profile_image,
         'blogs_counts':Blog.objects.filter(user= request.user).count(),
         'news_counts':News.objects.filter(user= request.user).count(),
+        
 
     }
     return render(request,'dashboard.html',context)
